@@ -17,6 +17,15 @@ def view_dvcards(request):
     }
     return render(request,'dvcard/dvc_mgt/view_dvcards.html',context)
 
+def view_dvcards_table(request):
+    username = request.session['username']
+    user = enduser_login.objects.get(username=username)
+    user_id = user.id
+    context = {
+        'dvc': dvc.objects.filter(flag=1, user_id=user_id)
+    }
+    return render(request,'dvcard/dvc_mgt/view_dvcards_table.html',context)
+
 def update_dvc_page(request,id):
     if 'username' in request.session:
         username = request.session['username']
