@@ -52,6 +52,7 @@
    </div>
    <ul class="sidebar-menu do-nicescrol">
       <li class="sidebar-header">MAIN NAVIGATION</li>
+
        <li>
         <a href="{% url 'customer_landing_page' %}">
           <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
@@ -59,8 +60,14 @@
       </li>
 
         <li>
-        <a href="">
-          <i class="zmdi zmdi-format-list-bulleted"></i> <span>Branches</span>
+        <a href="{% url 'view_all_users' %}">
+          <i class="zmdi zmdi-format-list-bulleted"></i> <span>Digital Business Hub</span>
+        </a>
+      </li>
+
+       <li>
+        <a href="{% url 'view_dvcards' %}">
+          <i class="zmdi zmdi-face"></i> <span>Digital Business Card</span>
         </a>
       </li>
 
