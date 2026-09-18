@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - {{datas.company_name}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a4d3e 0%, #2d6a4f 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .qr-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: #2d6a4f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+        }
+
+        h1 {
+            color: #1e3a2f;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5a6e66;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        canvas {
+            width: 200px;
+            height: 200px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .url-display {
+            background: #f0f4f2;
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            word-break: break-all;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .url-display a {
+            color: #2d6a4f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .url-display a:hover {
+            text-decoration: underline;
+        }
+
+        .download-btn {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #1e4a3a;
+            transform: translateY(-2px);
+        }
+
+        .note {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: #8ba192;
+            background: #f8faf9;
+            padding: 12px;
+            border-radius: 16px;
+        }
+
+        .status-warning {
+            background: #fff3e0;
+            border-left: 4px solid #e67e22;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            text-align: left;
+            color: #a16200;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #e0e8e4;
+        }
+    </style>
+</head>
+<body>
+
+
+<a href="{% url 'view_dvcards' %}"
+   style="
+       position: fixed;
+       top: 20px;
+       left: 20px;
+       z-index: 9999;
+       text-decoration: none;
+   ">
+    <input type="button"
+           value="<<= back"
+           style="
+               background-color:red;
+               color:white;
+               border:none;
+               padding:10px 20px;
+               border-radius:5px;
+               cursor:pointer;
+           ">
+</a>
+
+
+
+    <div class="qr-card">
+        <div class="logo">
+            <i class="fas fa-qrcode"></i>
+        </div>
+        <h1>Scan to Visit</h1>
+        <div class="subtitle">
+            <h3>{{datas.company_name}} <br> {{datas.name}}</h3>
+        </div>
+
+        <div class="qr-container">
+            <canvas id="qrcodeCanvas"></canvas>
+        </div>
+
+        <div class="url-display">
+            <a href="{% url 'sample_page_dvc' id=datas.id %}" target="_blank">
+                <h3>🔗 Go to digital business card</h3>
+            </a>
+        </div>
+
+        <button class="download-btn" id="downloadBtn">
+            <i class="fas fa-download"></i> Download QR Code (PNG)
+        </button>
+
+        <div class="status-warning">
+            <strong><i class="fas fa-lock"></i> Note:</strong> The website requires login access (401 Unauthorized).<br>
+            The QR code will still direct users to the link, but they may need credentials to view the content.
+        </div>
+
+        <hr>
+
+        <div class="note">
+            <i class="fas fa-mobile-alt"></i> Scan with any QR reader or camera app
+        </div>
+        <a href="https://hbct.in/" style="text-decoration:none; color:#8ba192; font-size:12px;">Powered By HBCT.IN</a>
+    </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- More reliable QR library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <script>
+        const url = "http://10.70.14.217:8000/dvcapp/sample_page_dvc/{{datas.id}}";
+        const canvas = document.getElementById("qrcodeCanvas");
+
+        // Generate QR code using more reliable QRCode library
+        async function generateQR() {
+            try {
+                // Set canvas size
+                canvas.width = 400;
+                canvas.height = 400;
+
+                // Generate QR code directly to canvas
+                await QRCode.toCanvas(canvas, url, {
+                    width: 400,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    },
+                    errorCorrectionLevel: 'M'
+                });
+
+                console.log("QR Code generated successfully");
+            } catch (error) {
+                console.error("Error generating QR code:", error);
+                // Fallback: show error message on canvas
+                const ctx = canvas.getContext("2d");
+                ctx.fillStyle = "#f0f4f2";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#e74c3c";
+                ctx.font = "14px Arial";
+                ctx.fillText("Error generating QR code", 120, 200);
+            }
+        }
+
+        // Generate QR on page load
+        generateQR();
+
+        // Download QR Code as PNG
+        const downloadBtn = document.getElementById("downloadBtn");
+        downloadBtn.addEventListener("click", () => {
+            try {
+                const link = document.createElement("a");
+                // Use a more descriptive filename
+                link.download = "{{datas.name}}_digital_business_card_qr.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            } catch (error) {
+                console.error("Error downloading QR code:", error);
+                alert("Unable to download QR code. Please try again.");
+            }
+        });
+
+        // Handle responsive canvas size
+        function resizeCanvas() {
+            const container = document.querySelector(".qr-container");
+            const size = Math.min(container.clientWidth, 250);
+            canvas.style.width = size + "px";
+            canvas.style.height = size + "px";
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+    </script>
+
+
+	<script>
+    // Disable right click
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+    });
+
+    // Disable specific keyboard shortcuts
+    document.addEventListener("keydown", function(e) {
+      // F12
+      if (e.keyCode === 123) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
+      if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) {
+        e.preventDefault();
+      }
+      // Ctrl+U (View source)
+      if (e.ctrlKey && e.key === "u") {
+        e.preventDefault();
+      }
+      // Ctrl+S (Save page)
+      if (e.ctrlKey && e.key === "s") {
+        e.preventDefault();
+      }
+    });
+  </script>
+
+
+</body>
+</html>

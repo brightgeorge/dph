@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>{{datas.name}} | Digital Business Card</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background: #eef2f0;
+    padding: 16px;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 36px 36px 28px 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #5b8c74, #9dd0b7);
+    min-height: 300px;
+    text-align: center;
+    position: relative;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    color: #1e2f28;
+}
+
+.profile {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    object-fit: cover;
+    background: #fff;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+}
+
+.name {
+    font-size: 32px;
+    font-weight: 800;
+    margin-top: 14px;
+    letter-spacing: -0.3px;
+    color: #1f2e27;
+    line-height: 1.2;
+}
+
+.designation {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 8px;
+    background: rgba(255,255,240,0.2);
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 40px;
+    backdrop-filter: blur(3px);
+    color: #1e3a2f;
+    max-width: 90%;
+    word-break: keep-all;
+    white-space: normal;
+    line-height: 1.35;
+}
+
+/* TOP BUTTONS */
+.action-buttons {
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+}
+
+.action-btn {
+    width: 76px;
+    height: 76px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #2c4b3e;
+    font-size: 26px;
+    box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, background 0.2s;
+}
+
+.action-btn:hover {
+    transform: translateY(-4px);
+    background: #f8fdfa;
+    color: #146b3a;
+}
+
+/* CONTENT */
+.content {
+    padding: 70px 20px 30px;
+}
+
+.info-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    border: 1px solid #f0f2f0;
+    transition: all 0.2s;
+}
+
+.info-card:hover {
+    border-color: #cfe3d8;
+    box-shadow: 0 6px 12px rgba(98,128,110,0.08);
+}
+
+.info-icon {
+    width: 52px;
+    height: 52px;
+    background: #f3f9f5;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #5b8c74;
+    font-size: 24px;
+}
+
+.label {
+    color: #6c7e74;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2e28;
+    margin-top: 4px;
+    word-break: break-word;
+}
+
+.value a {
+    color: #2c6e4f;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dashed #bbd5c8;
+}
+
+.value a:hover {
+    color: #146b3a;
+}
+
+.map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    background: #eef8f2;
+    color: #2c6e4f;
+    padding: 8px 18px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* SOCIAL */
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 28px 0 14px;
+    color: #1f2e28;
+}
+
+.social-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    text-decoration: none;
+    color: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    border: 1px solid #eef0ee;
+    transition: 0.2s;
+}
+
+.social-box:hover {
+    background: #fcfefd;
+    border-color: #c2dbce;
+    transform: scale(0.99);
+}
+
+.social-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.social-left img {
+    width: 42px;
+    height: 42px;
+    border-radius: 28px;
+    background: #eef3ef;
+    padding: 6px;
+}
+
+/* ADD CONTACT */
+.add-contact-btn {
+    width: 100%;
+    border: none;
+    background: #2c6e4f;
+    padding: 16px;
+    border-radius: 60px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    color: white;
+    transition: 0.2s;
+    box-shadow: 0 8px 18px rgba(44,110,79,0.2);
+}
+
+.add-contact-btn:hover {
+    background: #1f543d;
+    transform: translateY(-2px);
+}
+
+.footer {
+    text-align: center;
+    padding: 22px 20px 28px;
+    color: #8aa198;
+    font-size: 13px;
+    border-top: 1px solid #eef0eb;
+    margin-top: 12px;
+}
+
+.footer a {
+    color: #5b8c74;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.location-detail-text {
+    font-size: 17px;
+    font-weight: 500;
+    color: #2a483a;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+@media (max-width: 450px) {
+    .header {
+        padding-top: 42px;
+        min-height: 290px;
+    }
+    .name {
+        font-size: 28px;
+    }
+    .designation {
+        font-size: 15px;
+        padding: 5px 14px;
+        white-space: normal;
+        word-break: break-word;
+        max-width: 85%;
+    }
+    .action-btn {
+        width: 68px;
+        height: 68px;
+        font-size: 24px;
+    }
+    .content {
+        padding-top: 68px;
+    }
+    .info-card {
+        padding: 14px 16px;
+    }
+    .value {
+        font-size: 16px;
+    }
+}
+</style>
+
+
+
+</head>
+<body>
+   <a href="{% url 'view_dvcards' %}"
+   style="
+       position1: fixed;
+       top: 20px;
+       left: 20px;
+       z-index: 9999;
+       text-decoration: none;
+   ">
+    <input type="button"
+           value="<<= back"
+           style="
+               background-color:red;
+               color:white;
+               border:none;
+               padding:10px 20px;
+               border-radius:5px;
+               cursor:pointer;
+           ">
+</a>
+
+
+{% for i in dvc %}
+<div class="container">
+    <div class="header">
+        <img src="haseeb_abdulla.jpeg" class="profile" alt="Haseeb Abdulla" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=8bc9a5&color=fff&name=ABDUL+SAMAD&size=110&rounded=true&bold=true';">
+        <div class="name">{{i.name}} </div>
+        <div class="designation">{{i.designation}}</div>
+        <div class="action-buttons">
+            {% if i.mobile_number_flag == '1' %}
+            <a href="tel:{{i.mobile_number}}" class="action-btn">
+                <i class="fa-solid fa-phone"></i>
+            </a>
+            {% endif %}
+            {% if i.mobile_number_flag == '1' %}
+            <a href="mailto:{{i.email_id}}" class="action-btn">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            {% endif %}
+            {% if i.location_url_flag == '1' %}
+            <a href="{{i.location_url}}" target="_blank" class="action-btn">
+                <i class="fa-solid fa-location-dot"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- PHONE CARD -->
+        {% if i.mobile_number_flag == '1' %}
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+                <div class="label">Phone / WhatsApp</div>
+                <div class="value">{{i.mobile_number}}</div>
+                <a href="tel:{{i.mobile_number}}" style="font-size:13px; text-decoration:none; color:#5b8c74;">📞 Call now</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- EMAIL CARD -->
+        {% if i.email_id_flag == '1' %}
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div>
+                <div class="label">Email</div>
+                <div class="value">{{i.email_id}}</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- WEBSITE -->
+        {% if i.website_url_flag == '1' %}
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-globe"></i>
+            </div>
+            <div>
+                <div class="label">Website</div>
+                <div class="value">
+                    <a href="{{i.website_url}}" target="_blank" rel="noopener">{{i.website_url}}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- LOCATION CARD -->
+        {% if i.location_address_flag == '1' %}
+        <div class="info-card" id="location">
+            <div class="info-icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+                <div class="label">Office Location</div>
+                <div class="location-detail-text">
+                    {{i.location_address}}
+                </div>
+                <a href="{{i.location_url}}" target="_blank" class="map-btn">
+                    <i class="fa-solid fa-map-pin"></i> Open Maps
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- COMPANY & ROLE -->
+        {% if i.designation_flag == '1' %}
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <div>
+                <div class="label">{{i.company_name}}</div>
+                <div class="value">{{i.designation}}</div>
+                <div style="font-size:13px; margin-top:6px; color:#5b7b6b;">📍 Admin & operations</div>
+            </div>
+        </div>
+            {% endif %}
+
+        <h2 class="section-title">Connect with me</h2>
+
+        <!-- WhatsApp -->
+        {% if i.whatsapp_flag == '1' %}
+        <a href="https://wa.me/{{i.whatsapp}}?text=Hello%20{{i.name}}%2C%20I%20saw%20your%20digital%20Visiting-Card." class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg';">
+                <span style="font-weight:500;">WhatsApp</span>
+            </div>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        {% endif %}
+
+        <!-- INSTAGRAM LINK - ADDED as requested -->
+        {% if i.instagram_flag == '1' %}
+        <a href="{{i.instagram}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg';">
+                <span style="font-weight:500;">Instagram</span>
+            </div>
+            <i class="fa-brands fa-instagram"></i>
+        </a>
+        {% endif %}
+
+        <!-- FACEBOOK LINK -->
+        {% if i.facebook_flag == '1' %}
+        <a href="{{i.facebook}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg';">
+                <span style="font-weight:500;">Facebook</span>
+            </div>
+            <i class="fa-brands fa-facebook"></i>
+        </a>
+        {% endif %}
+
+        <!-- LINKEDIN LINK -->
+        {% if i.linkedin_flag == '1' %}
+        <a href="{{i.linkedin}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg';">
+                <span style="font-weight:500;">LinkedIn</span>
+            </div>
+            <i class="fa-brands fa-linkedin"></i>
+        </a>
+        {% endif %}
+
+        <!-- TWITTER / X LINK -->
+        {% if i.twitter_flag == '1' %}
+        <a href="{{i.twitter}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968830.png" alt="Twitter" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg';">
+                <span style="font-weight:500;">Twitter</span>
+            </div>
+            <i class="fa-brands fa-x-twitter"></i>
+        </a>
+        {% endif %}
+
+        <!-- TELEGRAM LINK -->
+        {% if i.telegram_flag == '1' %}
+        <a href="{{i.telegram}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg';">
+                <span style="font-weight:500;">Telegram</span>
+            </div>
+            <i class="fa-brands fa-telegram"></i>
+        </a>
+        {% endif %}
+
+        <!-- YOUTUBE LINK -->
+        {% if i.youtube_flag == '1' %}
+        <a href="{{i.youtube}}" class="social-box" target="_blank">
+            <div class="social-left">
+                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg';">
+                <span style="font-weight:500;">YouTube</span>
+            </div>
+            <i class="fa-brands fa-youtube"></i>
+        </a>
+        {% endif %}
+
+
+
+
+
+
+        <!-- SAVE CONTACT BUTTON (vCard) with correct CEO details -->
+        <button class="add-contact-btn" onclick="downloadContact()">
+            <i class="fa-regular fa-address-card"></i>
+            Save Contact (vCard)
+        </button>
+    </div>
+
+    <div class="footer">
+        <a href="https://thalasseryuae.com/" target="_blank">
+		⚡ Thalassery Group UAE</a> — Digital Business Card
+		<br><hr><span style="color:red"> Powred By — </span>
+		<a href="https://hbct.in/" target="_blank">
+		⚡ HBCT.IN</a>
+    </div>
+
+</div>
+
+<script>
+// Fixed vCard with correct details: {{i.name}}, {{i.designation}}, {{i.company_name}}, proper phone/email/address
+function downloadContact() {
+    const vCardData =
+`BEGIN:VCARD
+VERSION:3.0
+FN:{{i.name}}
+N:{{i.name}};;;
+ORG:{{i.company_name}}
+TITLE:{{i.designation}}
+ROLE:{{i.designation}}
+TEL;TYPE=WORK,VOICE:{{i.mobile_number}}
+TEL;TYPE=CELL:{{i.mobile_number}}
+EMAIL;TYPE=WORK:{{i.email_id}}
+URL:{{i.website_url}}
+ADR;TYPE=WORK:;;{{i.location_address}}
+NOTE:{{i.designation}} | Operations & Strategic Leadership
+REV:${new Date().toISOString().slice(0, 10)}
+END:VCARD`;
+
+    const blob = new Blob([vCardData], { type: 'text/vcard' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = '{{i.name}}.vcf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+}
+
+// Smooth scroll for location highlight
+document.querySelectorAll('.action-btn[href="#location"]').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.getElementById('location');
+        if(target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.style.transition = 'background 0.3s';
+            target.style.backgroundColor = '#f2fef7';
+            setTimeout(() => { target.style.backgroundColor = ''; }, 800);
+        }
+    });
+});
+
+// Ensure any double-check for designation visibility & corrections
+const ensureDisplay = () => {
+    const desigEl = document.querySelector('.designation');
+    if(desigEl) {
+        desigEl.style.whiteSpace = 'normal';
+        desigEl.style.wordBreak = 'break-word';
+        desigEl.style.display = 'inline-block';
+        desigEl.style.maxWidth = '95%';
+    }
+    // fix any legacy phone icon consistency:
+    const callAction = document.querySelector('.action-buttons a[href*="tel"]');
+    if(callAction && callAction.getAttribute('href') !== 'tel:{{i.mobile_number}}') {
+        callAction.setAttribute('href', 'tel:{{i.mobile_number}}');
+    }
+    const mailAction = document.querySelector('.action-buttons a[href*="mailto"]');
+    if(mailAction && mailAction.getAttribute('href') !== 'mailto:{{i.email_id}}') {
+        mailAction.setAttribute('href', 'mailto:{{i.email_id}}');
+    }
+};
+ensureDisplay();
+</script>
+
+{% endfor %}
+<script>
+    // Disable right click
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+    });
+
+    // Disable specific keyboard shortcuts
+    document.addEventListener("keydown", function(e) {
+      // F12
+      if (e.keyCode === 123) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
+      if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) {
+        e.preventDefault();
+      }
+      // Ctrl+U (View source)
+      if (e.ctrlKey && e.key === "u") {
+        e.preventDefault();
+      }
+      // Ctrl+S (Save page)
+      if (e.ctrlKey && e.key === "s") {
+        e.preventDefault();
+      }
+    });
+  </script>
+
+</body>
+</html>
