@@ -63,7 +63,7 @@
      <div class="brand-logo">
       <a href="index.html">
        <img src="{% static 'admindashboard/assets/images/logo-icon.png' %}" class="logo-icon" alt="logo icon">
-       <h5 class="logo-text">Open Bright</h5>
+       <h5 class="logo-text">Digital Visiting Hub</h5>
      </a>
    </div>
    <ul class="sidebar-menu do-nicescrol">
@@ -74,11 +74,6 @@
         </a>
       </li>
 
-        <li>
-        <a href="">
-          <i class="zmdi zmdi-format-list-bulleted"></i> <span>Branches</span>
-        </a>
-      </li>
 
        <li>
         <a href="{% url 'view_all_users' %}">
@@ -86,7 +81,11 @@
         </a>
       </li>
 
-      <li>
+       <li>
+        <a href="{% url 'view_all_endusers' %}">
+          <i class="zmdi zmdi-face"></i> <span>Customer Login</span>
+        </a>
+      </li>
         <a href="{% url 'logout' %}">
           <i class="zmdi zmdi-lock"></i> <span>Logout</span>
         </a>
