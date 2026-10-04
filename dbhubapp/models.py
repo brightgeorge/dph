@@ -10,7 +10,7 @@ class dvh(models.Model):
     digital_visiting_card = models.CharField(max_length=250)
     digital_visiting_card_flag = models.CharField(max_length=10)
 
-    google_review = models.CharField(max_length=250)
+    google_review = models.TextField()
     google_review_flag = models.CharField(max_length=10)
     instgram = models.CharField(max_length=250)
     instgram_flag = models.CharField(max_length=10)
