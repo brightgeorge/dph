@@ -34,14 +34,14 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
   <!-- Button trigger modal -->
-  
+
 </head>
 
 <body class="bg-theme bg-theme1">
- 
+
 <!-- Start wrapper-->
  <div id="wrapper">
- 
+
   <!--Start sidebar-wrapper-->
 <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
      <div class="brand-logo">
@@ -51,23 +51,22 @@
      </a>
    </div>
    <ul class="sidebar-menu do-nicescrol">
-      <li class="sidebar-header">Digital Visiting Hub</li>
+      <li class="sidebar-header">MAIN NAVIGATION</li>
        <li>
         <a href="{% url 'admin_dashboard' %}">
           <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
 
-
-       <li>
-        <a href="{% url 'view_all_users' %}">
-          <i class="zmdi zmdi-face"></i> <span>Users</span>
+        <li>
+        <a href="">
+          <i class="zmdi zmdi-format-list-bulleted"></i> <span>Branches</span>
         </a>
       </li>
 
        <li>
-        <a href="{% url 'view_all_endusers' %}">
-          <i class="zmdi zmdi-face"></i> <span>Customer Login</span>
+        <a href="{% url 'view_all_users' %}">
+          <i class="zmdi zmdi-face"></i> <span>Users</span>
         </a>
       </li>
 
@@ -99,7 +98,7 @@
       </form>
     </li>
   </ul>
-     
+
   <ul class="navbar-nav align-items-center right-nav-link">
     <li class="nav-item dropdown-lg">
       <a class="nav-link dropdown-toggle dropdown-toggle-nocaret waves-effect" data-toggle="dropdown" href="javascript:void();">
@@ -150,11 +149,56 @@
 <!--End topbar header-->
 
 <div class="clearfix"></div>
-	
+
   <div class="content-wrapper">
     <div class="container-fluid">
 
   <!--Start Dashboard Content-->
+
+	<div class="card mt-3">
+    <div class="card-content">
+        <div class="row row-group m-0">
+            <div class="col-12 col-lg-6 col-xl-4 border-light">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">9526 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                       <div class="progress-bar" style="width:100%"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Total Items <span class="float-right"> <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4 border-light">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">8323 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                       <div class="progress-bar" style="width:100%"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Enable Items <span class="float-right"><i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4 border-light">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">6200 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                       <div class="progress-bar" style="width:100%"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Disable Items <span class="float-right"> <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                </div>
+            </div>
+           <!-- <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                  <h5 class="text-white mb-0">5630 <span class="float-right"><i class="fa fa-envira"></i></span></h5>
+                    <div class="progress my-3" style="height:3px;">
+                       <div class="progress-bar" style="width:55%"></div>
+                    </div>
+                  <p class="mb-0 text-white small-font">Messages <span class="float-right">+2.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                </div>
+            </div>-->
+        </div>
+    </div>
+ </div>
+
+
 
 
 {% if messages %}
@@ -173,14 +217,14 @@
 	<div class="row">
 	 <div class="col-12 col-lg-12">
 	   <div class="card">
-	     <div class="card-header">View all Customers
+	     <div class="card-header">View all Digital Business Card
 		  <div class="card-action">
              <div class="dropdown">
              <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
               <i class="icon-options"></i>
              </a>
               <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="{% url 'create_enduser' %}">Create New User</a>
+              <a class="dropdown-item" href="{% url 'add_dvc' id=id%}">Create New DVC</a>
 
               </div>
              </div>
@@ -191,17 +235,15 @@
                    <tr>
                        <th>Manage</th>
 						<th>Sl No</th>
-                     <th>Customer Code</th>
+                     <th>Product Code</th>
                      <th>Customer Name</th>
-                     <th>User Name</th>
-                       <th>Password</th>
-                     <th>Role</th>
+                     <th>Mobile</th>
                      <th>Description</th>
 
                    </tr>
                    </thead>
                    <tbody>
-                   {% for i in users %}
+                   {% for i in dvc %}
 
 				   <tr>
                        <td><div class="dropdown">
@@ -209,27 +251,23 @@
               <i class="icon-options1" style="background-color:red;border:1px solid green;">manage</i>
              </a>
               <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="{% url 'product_home_page' id=i.id %}">View Products</a>
-                  <a class="dropdown-item" href="#">+ Add Digital Business Hub</a>
-                  <a class="dropdown-item" href="{% url 'add_dvc' id=i.id %}">+ Add Digital Business Card</a>
+                  <a class="dropdown-item" href="">+ Add Plan</a>
                   <a class="dropdown-item" href="{% url 'enduser_update' id=i.id %}">Update Current User</a>
                 <a class="dropdown-item" href="{% url 'delete_enduser' id=i.id %}">Delete Current User</a>
 
                </div>
               </div></td>
                     <td>{{forloop.counter}}</td>
-				   <td>{{i.customer_id}}</td>
-                    <td>{{i.customer_name}}</td>
-                    <td>{{i.username}}</td>
-                       <td>{{i.password}}</td>
-                    <td>{{i.role}}</td>
-					<td>{{i.customer_description}}</td>
+				   <td>{{i.code}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.mobile_number}}</td>
+					<td>{{i.description}}</td>
 
                    </tr>
                 {% endfor %}
 
 
-                   
+
                  </tbody></table>
                </div>
 	   </div>
@@ -237,19 +275,19 @@
 	</div><!--End Row-->
 
       <!--End Dashboard Content-->
-	  
+
 	<!--start overlay-->
 		  <div class="overlay toggle-menu"></div>
 		<!--end overlay-->
-		
+
     </div>
     <!-- End container-fluid-->
-    
+
     </div><!--End content-wrapper-->
    <!--Start Back To Top Button-->
     <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
     <!--End Back To Top Button-->
-	
+
 	<!--Start footer-->
 	<footer class="footer">
       <div class="container">
@@ -259,7 +297,7 @@
       </div>
     </footer>
 	<!--End footer-->
-	
+
   <!--start color switcher-->
    <div class="right-sidebar">
     <div class="switcher-icon">
@@ -269,7 +307,7 @@
 
       <p class="mb-0">Gaussion Texture</p>
       <hr>
-      
+
       <ul class="switcher">
         <li id="theme1"></li>
         <li id="theme2"></li>
@@ -281,7 +319,7 @@
 
       <p class="mb-0">Gradient Background</p>
       <hr>
-      
+
       <ul class="switcher">
         <li id="theme7"></li>
         <li id="theme8"></li>
@@ -293,18 +331,18 @@
         <li id="theme14"></li>
         <li id="theme15"></li>
       </ul>
-      
+
      </div>
    </div>
   <!--end color switcher-->
-   
+
   </div><!--End wrapper-->
 
   <!-- Bootstrap core JavaScript-->
   <script src="{% static 'admindashboard//assets/js/jquery.min.js' %}"></script>
   <script src="{% static 'admindashboard//assets/js/popper.min.js' %}"></script>
   <script src="{% static 'admindashboard//assets/js/bootstrap.min.js' %}"></script>
-	
+
  <!-- simplebar js -->
   <script src="{% static 'admindashboard//assets/plugins/simplebar/js/simplebar.js' %}"></script>
   <!-- sidebar-menu js -->
@@ -314,12 +352,12 @@
   <!-- Custom scripts -->
   <script src="{% static 'admindashboard//assets/js/app-script.js' %}"></script>
   <!-- Chart js -->
-  
+
   <script src="{% static 'admindashboard//assets/plugins/Chart.js/Chart.min.js' %}"></script>
- 
+
   <!-- Index js -->
   <script src="{% static 'admindashboard//assets/js/index.js' %}"></script>
 
-  
+
 </body>
 </html>

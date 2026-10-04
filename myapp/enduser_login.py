@@ -170,7 +170,7 @@ def enduser_update(request,id):
         uc.emp_description = udes
         uc.user_flage = chk
         uc.save()
-        messages.info(request, 'user updated sucessfully')
+        messages.info(request, 'Customer updated sucessfully')
         return view_all_endusers(request)
 
     context = {

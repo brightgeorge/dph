@@ -19,9 +19,13 @@ from django.urls import path, include
 
 import myapp.userurls
 import dvcapp.dvcappuserurls
+import dbhubapp.dbhubappuserurls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(myapp.userurls)),
     path('dvcapp/', include(dvcapp.dvcappuserurls)),
+    path('dbhubapp/', include(dbhubapp.dbhubappuserurls)),
+
+
 ]

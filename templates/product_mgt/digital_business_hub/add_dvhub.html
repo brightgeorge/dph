@@ -174,7 +174,7 @@
          <div class="card">
            <div class="card-body">
 		  <a href="{% url 'view_all_endusers' %}"> <button class="mybutton button1">X Close</button></a>
-           <div class="card-title">Digital Visiting Card Plan Form </div>
+           <div class="card-title">Digital Visiting Hub Plan Form {{id}} </div>
 
 
                {% if messages %}
@@ -191,9 +191,11 @@
 
 
            <hr>
-            <form action="{% url 'dvc_plan_regi' %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'dbh_regi' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 			<div class="form-group">
+                <input type="hidden" value="{{id}}" name="id">
+
 				<label for="input-11" class="col-lg-2">Product Code</label>
 				<input type="text" class="form-control col-lg-2" id="input-11" value="{{product_code}}" style="display:inline;" name="code" required>
 
@@ -204,13 +206,13 @@
 
                 <div class="form-group">
 
-				<label for="input-12" class="col-lg-2">Customer Official Name Only</label>
+				<label for="input-12" class="col-lg-2">Company Name</label>
 				<input type="text" class="form-control col-lg-6" id="input-12" placeholder="Enter NAME ONLY" style="display:inline;" name="name" required>
 <small>
     Do not enter
-    <span style="color:red;">DESIGNATION</span>,
+    <span style="color:red;">YOUR NAME</span>,
     enter
-    <span style="color:green;">NAME ONLY</span>
+    <span style="color:green;">COMPANY NAME ONLY</span>
 </small>
 
 

@@ -52,21 +52,23 @@
    </div>
    <ul class="sidebar-menu do-nicescrol">
       <li class="sidebar-header">MAIN NAVIGATION</li>
-       <li>
+
+        <li>
         <a href="{% url 'admin_dashboard' %}">
           <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
 
-        <li>
-        <a href="">
-          <i class="zmdi zmdi-format-list-bulleted"></i> <span>Branches</span>
-        </a>
-      </li>
 
        <li>
         <a href="{% url 'view_all_users' %}">
           <i class="zmdi zmdi-face"></i> <span>Users</span>
+        </a>
+      </li>
+
+       <li>
+        <a href="{% url 'view_all_endusers' %}">
+          <i class="zmdi zmdi-face"></i> <span>Customer Login</span>
         </a>
       </li>
 
@@ -155,51 +157,6 @@
 
   <!--Start Dashboard Content-->
 
-	<div class="card mt-3">
-    <div class="card-content">
-        <div class="row row-group m-0">
-            <div class="col-12 col-lg-6 col-xl-4 border-light">
-                <div class="card-body">
-                  <h5 class="text-white mb-0">9526 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                       <div class="progress-bar" style="width:100%"></div>
-                    </div>
-                  <p class="mb-0 text-white small-font">Total Items <span class="float-right"> <i class="zmdi zmdi-long-arrow-up"></i></span></p>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-4 border-light">
-                <div class="card-body">
-                  <h5 class="text-white mb-0">8323 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                       <div class="progress-bar" style="width:100%"></div>
-                    </div>
-                  <p class="mb-0 text-white small-font">Enable Items <span class="float-right"><i class="zmdi zmdi-long-arrow-up"></i></span></p>
-                </div>
-            </div>
-            <div class="col-12 col-lg-6 col-xl-4 border-light">
-                <div class="card-body">
-                  <h5 class="text-white mb-0">6200 <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                       <div class="progress-bar" style="width:100%"></div>
-                    </div>
-                  <p class="mb-0 text-white small-font">Disable Items <span class="float-right"> <i class="zmdi zmdi-long-arrow-up"></i></span></p>
-                </div>
-            </div>
-           <!-- <div class="col-12 col-lg-6 col-xl-3 border-light">
-                <div class="card-body">
-                  <h5 class="text-white mb-0">5630 <span class="float-right"><i class="fa fa-envira"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                       <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                  <p class="mb-0 text-white small-font">Messages <span class="float-right">+2.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
-                </div>
-            </div>-->
-        </div>
-    </div>
- </div>
-
-
-
 
 {% if messages %}
                 {% for message in messages %}
@@ -214,65 +171,229 @@
             {% endif %}
 
 
-	<div class="row">
-	 <div class="col-12 col-lg-12">
-	   <div class="card">
-	     <div class="card-header">View all Customers
-		  <div class="card-action">
-             <div class="dropdown">
-             <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
-              <i class="icon-options"></i>
-             </a>
-              <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="{% url 'create_enduser' %}">Create New User</a>
-
-              </div>
-             </div>
-		 </div>
-	       <div class="table-responsive">
-                 <table class="table align-items-center table-flush table-borderless">
-                  <thead>
-                   <tr>
-                       <th>Manage</th>
-						<th>Sl No</th>
-                     <th>Customer Code</th>
-                     <th>Customer Name</th>
-                     <th>Mobile</th>
-                     <th>Description</th>
-
-                   </tr>
-                   </thead>
-                   <tbody>
-                   {% for i in dvc %}
-
-				   <tr>
-                       <td><div class="dropdown">
-             <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
-              <i class="icon-options1" style="background-color:red;border:1px solid green;">manage</i>
-             </a>
-              <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="">+ Add Plan</a>
-                  <a class="dropdown-item" href="{% url 'enduser_update' id=i.id %}">Update Current User</a>
-                <a class="dropdown-item" href="{% url 'delete_enduser' id=i.id %}">Delete Current User</a>
-
-               </div>
-              </div></td>
-                    <td>{{forloop.counter}}</td>
-				   <td>{{i.code}}</td>
-                    <td>{{i.name}}</td>
-                    <td>{{i.mobile_number}}</td>
-					<td>{{i.description}}</td>
-
-                   </tr>
-                {% endfor %}
 
 
 
-                 </tbody></table>
-               </div>
-	   </div>
-	 </div>
-	</div><!--End Row-->
+
+
+
+<!-- Start Dashboard Content -->
+
+<style>
+    .dashboard-card-link {
+        text-decoration: none;
+        display: inline-block;
+        width: 700px;
+        max-width: 90%;
+    }
+
+    .dashboard-card {
+        cursor: pointer;
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+
+    /* Mobile View */
+    @media (max-width: 576px) {
+
+        .dashboard-card-link {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .dashboard-card {
+            min-height: 200px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .dashboard-card .card-body {
+            padding: 25px 15px;
+        }
+
+        .dashboard-card i {
+            font-size: 45px !important;
+        }
+
+        .dashboard-card h4 {
+            font-size: 20px;
+            margin-top: 15px !important;
+        }
+
+        .dashboard-card p {
+            font-size: 14px;
+        }
+    }
+
+    /* Very Small Mobile Screens */
+    @media (max-width: 375px) {
+
+        .dashboard-card {
+            min-height: 180px;
+        }
+
+        .dashboard-card h4 {
+            font-size: 18px;
+        }
+
+        .dashboard-card p {
+            font-size: 13px;
+        }
+
+        .dashboard-card i {
+            font-size: 40px !important;
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+
+	<div class="row mt-5">
+
+
+		<!-- Digital Business Hub -->
+		{% if a > 0 %}
+		<div class="col-12 mb-4">
+			<div style="width:100%; text-align:center;">
+				<a href="{% url 'view_all_dvhub' id=id %}"
+				   class="dashboard-card-link">
+					<div class="card text-center dashboard-card"
+						 onmouseover="this.style.transform='translateY(-5px)';"
+						 onmouseout="this.style.transform='translateY(0)';">
+						<div class="card-body">
+							<i class="zmdi zmdi-format-list-bulleted" style="font-size:55px;"></i>
+							<h4 class="text-white mt-3">
+								Digital Presence Hub
+							</h4>
+							<p class="text-white mb-0">
+								Manage Digital Presence Hub
+							</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if a <= 0 %}
+		<div class="col-12 mb-4">
+			<div style="width:100%; text-align:center;">
+				<a href="{% url 'add_dvhub' id=id %}"
+				   class="dashboard-card-link">
+					<div class="card text-center dashboard-card"
+						 onmouseover="this.style.transform='translateY(-5px)';"
+						 onmouseout="this.style.transform='translateY(0)';">
+						<div class="card-body">
+							<i class="zmdi zmdi-format-list-bulleted" style="font-size:55px;"></i>
+							<h4 class="text-white mt-3">
+								+ ADD NEW
+							</h4>
+							<p class="text-white mb-0">
+								Digital Presence Hub
+							</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		{% endif %}
+
+
+    <!-- Digital Business Card -->
+
+		{% if b > 0 %}
+		<div class="col-12 mb-4">
+			<div style="width:100%;text-align:center;">
+				<a href="{% url 'view_all_dvc' id=id %}"
+				   class="dashboard-card-link">
+					<div class="card text-center dashboard-card"
+						 onmouseover="this.style.transform='translateY(-5px)';"
+						 onmouseout="this.style.transform='translateY(0)';">
+						<div class="card-body">
+							<i class="zmdi zmdi-face" style="font-size:55px;"></i>
+							<h4 class="text-white mt-3">
+								Digital Business Card
+							</h4>
+							<p class="text-white mb-0">
+								Manage Digital Business Cards
+							</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if b <= 0 %}
+		<div class="col-12 mb-4">
+			<div style="width:100%;text-align:center;">
+				<a href="{% url 'add_dvc' id=id %}"
+				   class="dashboard-card-link">
+					<div class="card text-center dashboard-card"
+						 onmouseover="this.style.transform='translateY(-5px)';"
+						 onmouseout="this.style.transform='translateY(0)';">
+						<div class="card-body">
+							<i class="zmdi zmdi-face" style="font-size:55px;"></i>
+							<h4 class="text-white mt-3">
+								+ ADD NEW
+							</h4>
+							<p class="text-white mb-0">
+								 Digital Business Cards
+							</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+		{% endif %}
+
+
+
+
+
+
+
+
+
+</div>
+
+<!-- End Dashboard Content -->
+
+
+
+
+
+
+
+
+
+
+
 
       <!--End Dashboard Content-->
 

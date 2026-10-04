@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Digital Hub | Smart Business Card</title>
+  <!-- Google Fonts & simple reset -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f5f7fe 0%, #eef2fa 100%);
+      font-family: 'Inter', sans-serif;
+      color: #1a2c3e;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    /* main container grid for cards */
+    .dashboard {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* header */
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .hero h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1f3b4c, #2b5f7a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: #4a627a;
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+
+    /* 6 option cards grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 3rem;
+    }
+
+    .option-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 1.6rem 1.2rem 1.8rem 1.2rem;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-align: center;
+      backdrop-filter: blur(0px);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .option-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 35px -12px rgba(0, 32, 64, 0.2);
+      border-color: #cbdff2;
+    }
+
+    /* icon circles */
+    .icon-circle {
+      width: 70px;
+      height: 70px;
+      background: #ecf3fa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2rem;
+      transition: background 0.2s;
+    }
+    .option-card:hover .icon-circle {
+      background: #dee9f2;
+    }
+
+    .option-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.3px;
+    }
+    .option-desc {
+      font-size: 0.85rem;
+      color: #5c6f87;
+      margin-bottom: 1.2rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #eef3fc;
+      padding: 0.25rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #2c6280;
+    }
+
+    /* Detail panel (when click on any option) */
+    .detail-panel {
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+      margin-top: 1rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .detail-header {
+      background: #1e2f3c;
+      padding: 1rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .detail-header h2 {
+      color: white;
+      font-weight: 600;
+      font-size: 1.5rem;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+    .close-btn:hover {
+      background: rgba(255,255,255,0.35);
+    }
+    .detail-content {
+      padding: 2rem 2rem 2.2rem;
+      background: #fefefe;
+    }
+
+    .info-card {
+      background: #f8fafd;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1.2rem;
+      border-left: 5px solid;
+    }
+
+    .mock-link {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 0.8rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: monospace;
+      background: #eef2f9;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .action-btn {
+      background: #2c5f8a;
+      border: none;
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 0.8rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .action-btn:hover {
+      background: #1f4768;
+      transform: scale(0.97);
+    }
+
+    hr {
+      margin: 1rem 0;
+      border: none;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #6c829e;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 1rem;
+      }
+      .detail-content {
+        padding: 1.2rem;
+      }
+      .option-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="hero">
+    <h1>✨ Digital Presence Hub</h1>
+    <p>Tap any service below — each opens a dedicated details page with insights and quick actions</p>
+  </div>
+
+  {% for i in dvh %}
+  <!-- 6 clickable options -->
+
+  <div class="options-grid" id="optionsGrid">
+
+    {% if i.digital_visiting_card_flag == '1' %}
+    <!-- 1) Digital Visiting Card -->
+    <div class="option-card" data-option="digitalCard">
+      <div class="icon-circle">📇</div>
+      <div class="option-title">Digital Visiting Card</div>
+      <div class="option-desc">Interactive vCard · share contact instantly</div>
+      <span class="badge">tap to open</span>
+    </div>
+    {% endif %}
+    {% if i.google_review_flag == '1' %}
+    <!-- 2) Google Review -->
+    <div class="option-card" data-option="googleReview">
+      <div class="icon-circle">⭐</div>
+      <div class="option-title">Google Review</div>
+      <div class="option-desc">Write & manage customer feedback</div>
+      <span class="badge">tap to open</span>
+    </div>
+    {% endif %}
+    {% if i.instgram_flag == '1' %}
+    <!-- 3) Instagram -->
+    <div class="option-card" data-option="instagram">
+      <div class="icon-circle">📸</div>
+      <div class="option-title">Instagram</div>
+      <div class="option-desc">Visual stories & reels engagement</div>
+      <span class="badge">tap to open</span>
+    </div>
+    {% endif %}
+    {% if i.facebook_flag == '1' %}
+    <!-- 4) Facebook -->
+    <div class="option-card" data-option="facebook">
+      <div class="icon-circle">👍</div>
+      <div class="option-title">Facebook</div>
+      <div class="option-desc">Community & business page</div>
+      <span class="badge">tap to open</span>
+    </div>
+    {% endif %}
+    {% if i.google_map_flag == '1' %}
+    <!-- 5) Google Map -->
+    <div class="option-card" data-option="googleMap">
+      <div class="icon-circle">📍</div>
+      <div class="option-title">Google Map</div>
+      <div class="option-desc">Location finder & directions</div>
+      <span class="badge">tap to open</span>
+    </div>
+    {% endif %}
+
+
+
+
+      {% if i.whatsapp_flag == '1' %}
+  <!-- 5) WhatsApp -->
+<div class="option-card" data-option="whatsapp">
+  <div class="icon-circle">💬</div>
+  <div class="option-title">WhatsApp</div>
+  <div class="option-desc">Chat & connect instantly</div>
+  <span class="badge">tap to open</span>
+</div>
+  {% endif %}
+
+
+    {% if i.website_flag == '1' %}
+    <!-- 6) Website -->
+    <div class="option-card" data-option="website">
+      <div class="icon-circle">🌐</div>
+      <div class="option-title">Website</div>
+      <div class="option-desc">Official site · portfolio & blog</div>
+      <span class="badge">tap to open</span>
+    </div>
+  </div>
+  {% endif %}
+
+
+
+
+
+
+  <!-- Dynamic detail panel: shows content based on which option was clicked -->
+  <div id="detailPanel" class="detail-panel" style="display: none;">
+    <div class="detail-header">
+      <h2 id="detailTitle"><span id="detailIcon"></span> <span id="detailName"></span></h2>
+      <button class="close-btn" id="closeDetailBtn">✕ Close</button>
+    </div>
+    <div class="detail-content" id="detailContent">
+      <!-- dynamic content will be injected here -->
+    </div>
+  </div>
+  <footer>
+    ⚡ Smart Business Suite — each card leads to an immersive information page
+  </footer>
+</div>
+
+```html
+<script>
+  // Helper: get icons & custom descriptions per service
+  function getOptionMeta(optionId) {
+    const map = {
+      digitalCard: {
+        name: "Digital Visiting Card",
+        icon: "📇",
+        mainDesc: "Modern, paperless business card with tap-to-share technology.",
+        details: [
+          "✔ QR Code ready: share vCard instantly",
+          "✔ Includes phone, email, social links & address",
+          "✔ Real-time update without reprinting",
+          "✔ Eco-friendly & trackable analytics"
+        ],
+        mockLink: "{{i.digital_visiting_card}}",
+        actionText: "Preview my digital card",
+        actionUrl: "{{i.digital_visiting_card}}",
+        color: "#2c6e9e"
+      },
+
+      googleReview: {
+        name: "Google Review",
+        icon: "⭐",
+        mainDesc: "Manage and boost your business reputation on Google Maps & Search.",
+        details: [
+          "✔ Respond to customers directly",
+          "✔ Increase star rating with smart invitations",
+          "✔ Showcase recent positive feedback",
+          "✔ Embed reviews on your website"
+        ],
+        mockLink: "{{i.google_review}}",
+        actionText: "Write a review",
+        actionUrl: "{{i.google_review}}",
+        color: "#f4b400"
+      },
+
+      instagram: {
+        name: "Instagram",
+        icon: "📸",
+        mainDesc: "Engage visually — stories, reels, shopping & DMs.",
+        details: [
+          "✔ 1B+ active users, high engagement",
+          "✔ Create reels & carousels for promotion",
+          "✔ Link-in-bio + shopping tags",
+          "✔ Insights & audience growth tools"
+        ],
+        mockLink: "{{i.instgram}}",
+        actionText: "Visit Instagram profile",
+        actionUrl: "{{i.instgram}}",
+        color: "#d62976"
+      },
+
+      facebook: {
+        name: "Facebook",
+        icon: "👍",
+        mainDesc: "Build community, events, groups & ads.",
+        details: [
+          "✔ Business Page & Messenger automation",
+          "✔ Targeted ads & local awareness campaigns",
+          "✔ Facebook Shops & reviews integration",
+          "✔ Insights & post scheduling"
+        ],
+        mockLink: "{{i.facebook}}",
+        actionText: "Open Facebook Page",
+        actionUrl: "{{i.facebook}}",
+        color: "#1877f2"
+      },
+
+      whatsapp: {
+  name: "WhatsApp",
+  icon: "💬",
+  mainDesc: "Connect with customers through instant messaging and business communication.",
+  details: [
+    "✔ Direct customer communication through WhatsApp",
+    "✔ WhatsApp Business profile and product catalog",
+    "✔ Quick replies and automated messaging",
+    "✔ Share updates, offers & business information"
+  ],
+  mockLink: "{{i.whatsapp}}",
+  actionText: "Open WhatsApp",
+  actionUrl: "{{i.whatsapp}}",
+  color: "#25D366"
+},
+
+      googleMap: {
+        name: "Google Map",
+        icon: "📍",
+        mainDesc: "Accurate location, directions, and local search visibility.",
+        details: [
+          "✔ Pin your business on Google Maps",
+          "✔ Get directions, route planning",
+          "✔ Show hours, contact, and photos",
+          "✔ Enable 'Street View' preview"
+        ],
+        mockLink: "{{i.google_map}}",
+        actionText: "View on Map",
+        actionUrl: "{{i.google_map}}",
+        color: "#34a853"
+      },
+
+      website: {
+        name: "Website",
+        icon: "🌐",
+        mainDesc: "Your central digital hub — fully responsive & professional.",
+        details: [
+          "✔ Custom domain & hosting",
+          "✔ SEO optimized, fast loading",
+          "✔ Contact forms, portfolio, e-commerce ready",
+          "✔ Analytics & conversion tools"
+        ],
+        mockLink: "{{i.website}}",
+        actionText: "Launch Website",
+        actionUrl: "{{i.website}}",
+        color: "#6c63ff"
+      }
+    };
+
+    return map[optionId];
+  }
+
+
+  // Render detailed page content based on clicked option
+  function renderDetailPage(optionId) {
+
+    const meta = getOptionMeta(optionId);
+
+    if (!meta) return;
+
+
+    // Set header title & icon
+    document.getElementById("detailName").innerText = meta.name;
+    document.getElementById("detailIcon").innerHTML = meta.icon;
+
+
+    // Optional style header accent dynamic
+    const detailHeader = document.querySelector(".detail-header");
+
+    if (detailHeader) {
+      detailHeader.style.background =
+        "linear-gradient(95deg, #1e2f3c, #1e3a47)";
+    }
+
+
+    // Build details list
+    const detailsList = meta.details
+      .map(item => `<li style="margin-bottom: 10px;">${item}</li>`)
+      .join("");
+
+
+    // Reference link
+    const mockLinkHtml = `
+      <div class="mock-link">
+        🔗 ${meta.mockLink}
+      </div>
+    `;
+
+
+    // Action button
+    const actionHtml = `
+      <button class="action-btn" id="dynamicActionBtn">
+        🚀 ${meta.actionText}
+      </button>
+
+      <div
+        id="actionFeedback"
+        style="
+          font-size: 0.75rem;
+          margin-top: 8px;
+          color: #4f6f8f;
+        "
+      ></div>
+    `;
+
+
+    // Build complete content
+    const contentHtml = `
+      <div
+        class="info-card"
+        style="border-left-color: ${meta.color};"
+      >
+
+        <div
+          style="
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+          "
+        >
+          ✨ Overview
+        </div>
+
+
+        <p
+          style="
+            line-height: 1.4;
+            margin-bottom: 16px;
+          "
+        >
+          ${meta.mainDesc}
+        </p>
+
+
+        <div style="font-weight: 500;">
+          🔍 Key features:
+        </div>
+
+
+        <ul
+          style="
+            margin: 12px 0 12px 20px;
+            line-height: 1.4;
+          "
+        >
+          ${detailsList}
+        </ul>
+
+
+        <div style="margin-top: 10px;">
+          <strong>📎 Reference link:</strong>
+          ${mockLinkHtml}
+        </div>
+
+
+        ${actionHtml}
+
+      </div>
+
+
+      <div
+        style="
+          background: #f0f4fa;
+          border-radius: 1rem;
+          padding: 1rem;
+          margin-top: 0.6rem;
+        "
+      >
+
+        <div
+          style="
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+          "
+        >
+
+          <span style="font-size: 0.9rem;">
+            💡 Tip:
+          </span>
+
+          <span style="font-size: 0.85rem;">
+            This is a dedicated page for "${meta.name}".
+            Each service card opens its own immersive detail panel.
+          </span>
+
+        </div>
+
+      </div>
+    `;
+
+
+    // Put generated content into detail container
+    const detailContainer =
+      document.getElementById("detailContent");
+
+    detailContainer.innerHTML = contentHtml;
+
+
+    // Get action button after dynamically creating it
+    const actionBtn =
+      document.getElementById("dynamicActionBtn");
+
+    const feedbackDiv =
+      document.getElementById("actionFeedback");
+
+
+    // Action button click
+    if (actionBtn) {
+
+      actionBtn.addEventListener("click", (e) => {
+
+        e.preventDefault();
+
+
+        /*
+          OPEN THE ACTUAL URL
+
+          For example:
+
+          Digital Visiting Card
+          https://hbct.in/dvc/thalassery_restaurants/abdul_samad.html
+        */
+
+        if (meta.actionUrl) {
+
+          // Open URL in a new browser tab
+          window.open(meta.actionUrl, "_blank");
+
+        }
+
+
+        // Optional feedback
+        if (feedbackDiv) {
+
+          feedbackDiv.innerHTML =
+            `✨ Opening ${meta.actionText}...`;
+
+          setTimeout(() => {
+            feedbackDiv.innerHTML = "";
+          }, 2000);
+
+        }
+
+
+        // Console message
+        console.log(
+          `User clicked action for ${meta.name}: ${meta.actionUrl}`
+        );
+
+
+        // Small button animation
+        actionBtn.style.transform = "scale(0.96)";
+
+        setTimeout(() => {
+          actionBtn.style.transform = "";
+        }, 150);
+
+      });
+
+    }
+
+
+    // Show detail panel
+    const panel =
+      document.getElementById("detailPanel");
+
+    panel.style.display = "block";
+
+
+    // Smooth scroll to detail panel
+    panel.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
+
+
+  // Get all option cards
+  const cards =
+    document.querySelectorAll(".option-card");
+
+
+  // Get close button
+  const closeBtn =
+    document.getElementById("closeDetailBtn");
+
+
+  // Get detail panel
+  const panel =
+    document.getElementById("detailPanel");
+
+
+  // Add click event to every service card
+  cards.forEach(card => {
+
+    card.addEventListener("click", (e) => {
+
+      const optionValue =
+        card.getAttribute("data-option");
+
+
+      if (optionValue) {
+
+        renderDetailPage(optionValue);
+
+      } else {
+
+        console.warn(
+          "No data-option found"
+        );
+
+      }
+
+    });
+
+  });
+
+
+  // Close detail panel
+  function closeDetailPanel() {
+
+    panel.style.display = "none";
+
+
+    // Clear existing content
+    document.getElementById(
+      "detailContent"
+    ).innerHTML = "";
+
+  }
+
+
+  // Close button click
+  if (closeBtn) {
+
+    closeBtn.addEventListener(
+      "click",
+      closeDetailPanel
+    );
+
+  }
+
+
+  // ESC key support
+  document.addEventListener(
+    "keydown",
+    (e) => {
+
+      if (
+        e.key === "Escape" &&
+        panel.style.display === "block"
+      ) {
+
+        closeDetailPanel();
+
+      }
+
+    }
+  );
+
+
+  // Console message
+  console.log(
+    "Ready: Click any of the six options → opens dedicated page with relevant details!"
+  );
+
+</script>
+```
+
+### Your Digital Visiting Card flow
+
+Your configuration is now:
+
+```javascript
+digitalCard: {
+    name: "Digital Visiting Card",
+    ...
+    actionText: "Preview my digital card",
+    actionUrl: "https://hbct.in/dvc/thalassery_restaurants/abdul_samad.html",
+    ...
+}
+```
+
+So the flow will be:
+
+**Digital Visiting Card card**
+↓
+Detail panel opens
+↓
+**🚀 Preview my digital card**
+↓
+`https://hbct.in/dvc/thalassery_restaurants/abdul_samad.html` opens in a **new tab**.
+
+For the other services, you can later replace their `actionUrl` values with their actual URLs in exactly the same way.
+{% endfor %}
+</body>
+</html>
