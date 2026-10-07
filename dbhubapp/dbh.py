@@ -21,13 +21,17 @@ def sample_page_dphub(request,id):
     if 'username' in request.session:
         username = request.session['username']
         print('username username',username)
+        user_in_session = 1
 
         user = enduser_login.objects.get(username=username)
         user_id = user.id
         print('user_id user_id',user_id)
+    else:
+        user_in_session = 0
     context = {
         'dvh': dvh.objects.filter(id=id,flag=1),
         'datas': dvh.objects.filter(id=id,flag=1).first(),
+        'user_in_session': user_in_session,
     }
     return render(request,'dphub/dphub_mgt/sample_page_dphub.html', context)
 
