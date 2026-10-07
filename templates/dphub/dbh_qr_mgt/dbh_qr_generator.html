@@ -178,7 +178,7 @@
         </div>
 
         <div class="url-display">
-            <a href="{% url 'sample_page_dphub' id=datas.id %}" target="_blank">
+            <a href="{% url 'digital_business_hub' id=datas.id %}" target="_blank">
                 <h3>🔗 Go to digital business Hub</h3>
             </a>
         </div>
@@ -206,7 +206,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
     <script>
-        const url = "http://162.35.107.246:8000/dbhubapp/sample_page_dphub/{{datas.id}}";
+        const url = "http://162.35.107.246:8000/dbhubapp/digital_business_hub/{{datas.id}}";
         const canvas = document.getElementById("qrcodeCanvas");
 
         // Generate QR code using more reliable QRCode library

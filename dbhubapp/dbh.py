@@ -9,13 +9,16 @@ import datetime
 # Create your views here.
 
 def view_dphub(request):
-    username = request.session['username']
-    user = enduser_login.objects.get(username=username)
-    user_id = user.id
-    context = {
-        'dvc': dvh.objects.filter(flag=1, user_id=user_id)
-    }
-    return render(request,'dphub/dphub_mgt/view_dphub.html',context)
+    if 'username' in request.session:
+        username = request.session['username']
+        user = enduser_login.objects.get(username=username)
+        user_id = user.id
+        context = {
+            'dvc': dvh.objects.filter(flag=1, user_id=user_id)
+        }
+        return render(request,'dphub/dphub_mgt/view_dphub.html',context)
+    else:
+        return render(request, 'index.html')
 
 def sample_page_dphub(request,id):
     if 'username' in request.session:
