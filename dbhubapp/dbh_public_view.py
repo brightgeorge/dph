@@ -17,11 +17,11 @@ def digital_business_hub(request,id):
         user = enduser_login.objects.get(username=username)
         user_id = user.id
         print('user_id user_id',user_id)
-    else:
-        user_in_session = 0
-    context = {
+        context = {
         'dvh': dvh.objects.filter(id=id,flag=1),
         'datas': dvh.objects.filter(id=id,flag=1).first(),
         'user_in_session': user_in_session,
-    }
-    return render(request,'dphub/dbh_public_view/digital_business_hub.html', context)
+        }
+        return render(request,'dphub/dbh_public_view/digital_business_hub.html', context)
+    else:
+        return render(request, 'index.html')
