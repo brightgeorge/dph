@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive Image Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f5f7fa;
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .header h1::before {
+            content: "🖼️";
+            font-size: 2rem;
+        }
+        .header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* ===== Gallery Grid ===== */
+        .gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.25);
+        }
+        .gallery-item .thumb-wrapper {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
+        .gallery-item .thumb {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            pointer-events: none;
+        }
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 0.8rem;
+            color: white;
+            pointer-events: none;
+        }
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+        .overlay-icon {
+            font-size: 1.4rem;
+        }
+
+        /* ===== Caption / Name under each image ===== */
+        .gallery-item .caption {
+            padding: 0.9rem 1.1rem;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .caption .image-name {
+            font-weight: 600;
+            font-size: 0.98rem;
+            color: #0f172a;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .caption .image-name::before {
+            content: "📷";
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .caption .image-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== Lightbox Modal ===== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+            animation: fadeIn 0.25s ease;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .lightbox-content {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.5);
+            position: relative;
+            animation: scaleIn 0.3s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .lightbox-content iframe {
+            width: 100%;
+            height: 75vh;
+            min-height: 400px;
+            border: none;
+            display: block;
+        }
+        .lightbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 1rem;
+        }
+        .lightbox-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            min-width: 0;
+        }
+        .lightbox-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .lightbox-title::before {
+            content: "📷";
+        }
+        .lightbox-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .lightbox-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .icon-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #475569;
+            transition: background 0.2s, transform 0.1s;
+            text-decoration: none;
+        }
+        .icon-btn:hover {
+            background: #e2e8f0;
+            transform: scale(1.05);
+        }
+        .icon-btn.close:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: background 0.2s, transform 0.2s;
+            z-index: 10;
+        }
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .nav-btn.prev { left: 1rem; }
+        .nav-btn.next { right: 1rem; }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* ===== Status Message ===== */
+        .status-msg {
+            max-width: 600px;
+            margin: 3rem auto;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.95rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px -8px rgba(0,0,0,0.1);
+        }
+        .status-msg .emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.5rem; }
+            .gallery { grid-template-columns: 1fr; gap: 1rem; }
+            .gallery-item .thumb-wrapper { height: 200px; }
+            .lightbox { padding: 1rem; }
+            .lightbox-content iframe { height: 60vh; }
+            .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+            .nav-btn.prev { left: 0.5rem; }
+            .nav-btn.next { right: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Header ===== -->
+    <div class="header">
+        <h1>My Google Drive Gallery</h1>
+        <p>Click any image to view it in full size</p>
+    </div>
+
+    <!-- ===== Gallery Grid ===== -->
+    <div class="gallery" id="gallery"></div>
+
+    <!-- ===== Status Message ===== -->
+    <div class="status-msg" id="statusMsg" style="display:none;">
+        <span class="emoji">📭</span>
+        <span id="statusText">No images found.</span>
+    </div>
+
+    <!-- ===== Lightbox Modal ===== -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+        <div class="lightbox-content">
+            <div class="lightbox-header">
+                <div class="lightbox-title-group">
+                    <div class="lightbox-title" id="lightboxTitle">Image</div>
+                    <div class="lightbox-subtitle" id="lightboxSubtitle"></div>
+                </div>
+                <div class="lightbox-actions">
+                    <a
+                        class="icon-btn"
+                        id="openInDrive"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Open in Google Drive">
+                        🔗
+                    </a>
+                    <button class="icon-btn close" id="closeLightbox" title="Close (Esc)">✕</button>
+                </div>
+            </div>
+            <iframe id="lightboxIframe" src="" title="Image preview" allow="autoplay"></iframe>
+        </div>
+        <button class="nav-btn prev" id="prevBtn" title="Previous (←)">‹</button>
+        <button class="nav-btn next" id="nextBtn" title="Next (→)">›</button>
+    </div>
+
+    <script>
+        /* =========================================================
+           📸 YOUR IMAGES — Just paste the FULL Google Drive share link!
+           =========================================================
+           Supported link formats (all work automatically):
+             ✅ https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+             ✅ https://drive.google.com/file/d/FILE_ID/view
+             ✅ https://drive.google.com/open?id=FILE_ID
+             ✅ https://drive.google.com/uc?id=FILE_ID
+             ✅ FILE_ID  (just the ID also works)
+
+           For each image provide:
+             - link:  The full Google Drive share link
+             - name:  Short name shown UNDER the image
+             - desc:  (optional) Small description below the name
+        */
+        const galleryItems = [
+            {
+                link: "https://drive.google.com/file/d/1QFmcp_VbM_1KOKczRaFu_PhdgVFXLuMd/view?usp=sharing",
+                name: "Comfort PG 1",
+                desc: "Main building view"
+            },
+			{
+                link: "https://drive.google.com/file/d/1UMKLxxtkguJNv6dK7Ovr6wNKZlm5yOV1/view?usp=drive_link",
+                name: "Comfort PG 1",
+                desc: "Main building view"
+            },
+			{
+                link: "https://drive.google.com/file/d/1KmR8u8S-wL8nWNYYtMA_8coDWPUd0b6h/view?usp=sharing",
+                name: "Comfort PG 1",
+                desc: "Main building view"
+            },
+            // 👇 Duplicate these blocks for your other images
+            // {
+            //     link: "https://drive.google.com/file/d/PASTE_SECOND_LINK_HERE/view?usp=sharing",
+            //     name: "Comfort PG 2",
+            //     desc: "Balcony view"
+            // },
+            // {
+            //     link: "https://drive.google.com/file/d/PASTE_THIRD_LINK_HERE/view?usp=sharing",
+            //     name: "Room Interior",
+            //     desc: "Deluxe room"
+            // },
+            // {
+            //     link: "https://drive.google.com/file/d/PASTE_FOURTH_LINK_HERE/view?usp=sharing",
+            //     name: "Common Area",
+            //     desc: "Shared lounge"
+            // },
+        ];
+
+        /* =========================================================
+           ⚙️ GALLERY LOGIC — No need to edit below this line
+           ========================================================= */
+
+        const galleryEl       = document.getElementById('gallery');
+        const statusMsgEl     = document.getElementById('statusMsg');
+        const statusTextEl    = document.getElementById('statusText');
+        const lightbox        = document.getElementById('lightbox');
+        const lightboxIframe  = document.getElementById('lightboxIframe');
+        const lightboxTitle   = document.getElementById('lightboxTitle');
+        const lightboxSubtitle= document.getElementById('lightboxSubtitle');
+        const openInDriveBtn  = document.getElementById('openInDrive');
+        const closeBtn        = document.getElementById('closeLightbox');
+        const prevBtn         = document.getElementById('prevBtn');
+        const nextBtn         = document.getElementById('nextBtn');
+
+        let currentIndex = 0;
+
+        /* ---------------------------------------------------------
+           🔑 EXTRACT FILE ID FROM ANY GOOGLE DRIVE LINK
+           ---------------------------------------------------------
+           This function accepts:
+             - Full share link:  https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+             - Open link:        https://drive.google.com/open?id=FILE_ID
+             - UC link:          https://drive.google.com/uc?id=FILE_ID
+             - Raw file ID:      FILE_ID
+           And returns just the FILE_ID.
+        */
+        function extractFileId(input) {
+            if (!input) return '';
+
+            // If it's already just a file ID (no slashes or dots)
+            if (/^[a-zA-Z0-9_-]{10,}$/.test(input) && !input.includes('/')) {
+                return input;
+            }
+
+            // Pattern 1: /file/d/FILE_ID/...
+            const fileDMatch = input.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (fileDMatch && fileDMatch[1]) return fileDMatch[1];
+
+            // Pattern 2: ?id=FILE_ID or &id=FILE_ID
+            const idParamMatch = input.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (idParamMatch && idParamMatch[1]) return idParamMatch[1];
+
+            // Pattern 3: /d/FILE_ID (short form)
+            const shortDMatch = input.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (shortDMatch && shortDMatch[1]) return shortDMatch[1];
+
+            // Fallback: return the input as-is
+            return input;
+        }
+
+        function getPreviewUrl(fileId) {
+            return `https://drive.google.com/file/d/${fileId}/preview`;
+        }
+        function getDriveViewUrl(fileId) {
+            return `https://drive.google.com/file/d/${fileId}/view`;
+        }
+
+        // Render the gallery grid
+        function renderGallery() {
+            if (!galleryItems.length) {
+                statusMsgEl.style.display = 'block';
+                statusTextEl.textContent = 'No images in the gallery yet. Add some to the galleryItems array!';
+                return;
+            }
+
+            galleryEl.innerHTML = '';
+            galleryItems.forEach((item, index) => {
+                // Extract the file ID from the link
+                const fileId = extractFileId(item.link);
+
+                const card = document.createElement('div');
+                card.className = 'gallery-item';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Open ${item.name}`);
+
+                // Thumbnail wrapper
+                const thumbWrapper = document.createElement('div');
+                thumbWrapper.className = 'thumb-wrapper';
+
+                const iframe = document.createElement('iframe');
+                iframe.className = 'thumb';
+                iframe.src = getPreviewUrl(fileId);
+                iframe.loading = 'lazy';
+                iframe.title = item.name;
+
+                const overlay = document.createElement('div');
+                overlay.className = 'overlay';
+                overlay.innerHTML = `<span class="overlay-icon">🔍</span>`;
+
+                thumbWrapper.appendChild(iframe);
+                thumbWrapper.appendChild(overlay);
+
+                // Caption under the image
+                const caption = document.createElement('div');
+                caption.className = 'caption';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'image-name';
+                nameEl.textContent = item.name || 'Untitled';
+                nameEl.title = item.name || 'Untitled';
+
+                caption.appendChild(nameEl);
+
+                if (item.desc) {
+                    const descEl = document.createElement('div');
+                    descEl.className = 'image-desc';
+                    descEl.textContent = item.desc;
+                    descEl.title = item.desc;
+                    caption.appendChild(descEl);
+                }
+
+                card.appendChild(thumbWrapper);
+                card.appendChild(caption);
+
+                // Open lightbox on click
+                card.addEventListener('click', () => openLightbox(index));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openLightbox(index);
+                    }
+                });
+
+                galleryEl.appendChild(card);
+            });
+        }
+
+        // Open the lightbox
+        function openLightbox(index) {
+            if (index < 0 || index >= galleryItems.length) return;
+
+            currentIndex = index;
+            const item = galleryItems[currentIndex];
+            const fileId = extractFileId(item.link);
+
+            lightboxIframe.src = getPreviewUrl(fileId);
+            lightboxTitle.textContent = item.name || 'Image';
+            lightboxSubtitle.textContent = item.desc || '';
+            openInDriveBtn.href = getDriveViewUrl(fileId);
+
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === galleryItems.length - 1;
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxIframe.src = '';
+            document.body.style.overflow = '';
+        }
+
+        function showPrev() {
+            if (currentIndex > 0) openLightbox(currentIndex - 1);
+        }
+        function showNext() {
+            if (currentIndex < galleryItems.length - 1) openLightbox(currentIndex + 1);
+        }
+
+        /* ===== Event Listeners ===== */
+        closeBtn.addEventListener('click', closeLightbox);
+        prevBtn.addEventListener('click', showPrev);
+        nextBtn.addEventListener('click', showNext);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape')      closeLightbox();
+            if (e.key === 'ArrowLeft')   showPrev();
+            if (e.key === 'ArrowRight')  showNext();
+        });
+
+        /* ===== Initialize ===== */
+        renderGallery();
+    </script>
+</body>
+</html>

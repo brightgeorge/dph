@@ -25,6 +25,7 @@ def sample_page_dphub(request,id):
         username = request.session['username']
         print('username username',username)
         user_in_session = 1
+        print('user_in_session', user_in_session)
 
         user = enduser_login.objects.get(username=username)
         user_id = user.id

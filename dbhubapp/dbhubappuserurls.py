@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from . import dbh
 from . import dbh_public_view
+from . import gallery
 
 urlpatterns = [
     path('view_dphub/', dbh.view_dphub, name='view_dphub'),
@@ -14,6 +15,8 @@ urlpatterns = [
 
 
     path('digital_business_hub/<id>', dbh_public_view.digital_business_hub, name='digital_business_hub'),
+
+    path('dphub_gallery/<id>', gallery.dphub_gallery, name='dphub_gallery'),
 
 
     ]
