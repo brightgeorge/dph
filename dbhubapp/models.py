@@ -27,3 +27,12 @@ class dvh(models.Model):
 
     description = models.TextField()
     flag = models.IntegerField()
+
+class dbh_gallery(models.Model):
+    dbh_id = models.CharField(max_length=250)
+    user_id = models.CharField(max_length=250)
+
+    google_drive_image_url = models.CharField(max_length=250)
+    google_drive_image_heading = models.CharField(max_length=250)
+    google_drive_image_description = models.TextField()
+    flag = models.CharField(max_length=10)

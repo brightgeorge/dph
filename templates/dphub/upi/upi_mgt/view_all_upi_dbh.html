@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .payment-card {
+            width: 100%;
+            max-width: 370px;
+            padding: 25px 20px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .google-pay-title {
+            margin: 0 0 20px;
+            color: #202124;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .google-pay-title span {
+            color: #4285f4;
+        }
+
+        .payee-name {
+            margin: 10px 0;
+            color: #202124;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .upi-label {
+            margin: 15px 0 6px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        .upi-id {
+            color: #202124;
+            font-size: 15px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .copy-button {
+            margin-top: 10px;
+            padding: 9px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #1a73e8;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background: #f1f6ff;
+        }
+
+        .qr-container {
+            margin: 22px auto 15px;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+            background: #ffffff;
+        }
+
+        .qr-container img {
+            width: 210px;
+            height: 210px;
+            object-fit: contain;
+        }
+
+        .scan-text {
+            margin: 10px 0 20px;
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .pay-button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #4285f4;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .pay-button:hover {
+            background: #3367d6;
+        }
+
+        .message {
+            min-height: 18px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .note {
+            margin-top: 18px;
+            color: #777777;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="payment-card">
+
+        <h1 class="google-pay-title">
+            <span>G</span>oogle Pay
+        </h1>
+
+        <div class="payee-name" id="payeeNameDisplay"></div>
+
+        <div class="upi-label">UPI ID</div>
+        <div class="upi-id" id="upiIdDisplay"></div>
+
+        <button
+            type="button"
+            class="copy-button"
+            onclick="copyUPI()">
+            Copy UPI ID
+        </button>
+
+        <div class="message" id="copyMessage"></div>
+
+        <div class="qr-container">
+            <img id="qrImage" src="" alt="UPI Payment QR Code">
+        </div>
+
+        <p class="scan-text">
+            Scan this QR code using any supported UPI app to make a payment.
+        </p>
+
+        <button
+            type="button"
+            class="pay-button"
+            onclick="openUPIApps()">
+            Pay using UPI App
+        </button>
+
+        <p class="note">
+            Select a compatible UPI app if prompted.
+            Verify the receiver's name and UPI ID before confirming payment.
+        </p>
+
+    </div>
+
+    <script>
+        // UPDATE YOUR PAYMENT DETAILS ONLY HERE
+        const upiId = "brightgeorge66-1@oksbi";
+        const payeeName = "Bright George";
+
+        // STANDARD UPI PAYMENT URL — NO additionalId
+        const upiURL =
+            "upi://pay?pa=" + encodeURIComponent(upiId) +
+            "&pn=" + encodeURIComponent(payeeName);
+
+        // DISPLAY PAYMENT DETAILS
+        document.getElementById("payeeNameDisplay").textContent =
+            payeeName;
+
+        document.getElementById("upiIdDisplay").textContent =
+            upiId;
+
+        // GENERATE QR CODE
+        document.getElementById("qrImage").src =
+            "https://api.qrserver.com/v1/create-qr-code/" +
+            "?size=300x300&data=" +
+            encodeURIComponent(upiURL);
+
+        // COPY UPI ID
+        async function copyUPI() {
+            const message = document.getElementById("copyMessage");
+
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(upiId);
+                } else {
+                    const textArea = document.createElement("textarea");
+
+                    textArea.value = upiId;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+
+                    document.body.appendChild(textArea);
+                    textArea.select();
+
+                    const copied = document.execCommand("copy");
+                    textArea.remove();
+
+                    if (!copied) {
+                        throw new Error("Copy failed");
+                    }
+                }
+
+                message.style.color = "#188038";
+                message.textContent = "UPI ID copied successfully!";
+            } catch (error) {
+                message.style.color = "#d93025";
+                message.textContent =
+                    "Copy failed. Please copy the UPI ID manually.";
+            }
+        }
+
+        // OPEN A COMPATIBLE UPI APP
+        function openUPIApps() {
+            // Launch the standard UPI payment URI.
+            // Android/browser decides which compatible apps are available.
+            window.location.href = upiURL;
+        }
+    </script>
+
+</body>
+</html>

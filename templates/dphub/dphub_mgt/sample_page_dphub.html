@@ -235,7 +235,7 @@
 {% if user_in_session == 1 %}
    <a href="{% url 'view_dphub' %}"
    style="
-       position1: fixed;
+       position: fixed;
        top: 20px;
        left: 20px;
        z-index: 9999;
@@ -326,15 +326,27 @@
 
 
     {% if i.website_flag == '1' %}
-    <!-- 6) Website -->
+    <!-- Website -->
     <div class="option-card" data-option="website">
       <div class="icon-circle">🌐</div>
       <div class="option-title">Website</div>
       <div class="option-desc">Official site · portfolio & blog</div>
       <span class="badge">tap to open</span>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
+
+
+    <!-- Google Drive Image Gallery -->
+    <div class="option-card" data-option="gallery">
+      <div class="icon-circle">🖼️</div>
+      <div class="option-title">Image Gallery</div>
+      <div class="option-desc">Photos · Memories · Collections</div>
+      <span class="badge">tap to open</span>
+    </div>
+
+
+  </div> <!-- End options-grid -->
+
 
 
 
@@ -479,7 +491,24 @@
         actionText: "Launch Website",
         actionUrl: "{{i.website}}",
         color: "#6c63ff"
-      }
+      },
+
+      gallery: {
+    name: "Image Gallery",
+    icon: "🖼️",
+    mainDesc: "Explore your photos in a beautiful, easy-to-access gallery.",
+    details: [
+        "✔ Images stored in Google Drive",
+        "✔ Easy access to photo collections",
+        "✔ Shareable gallery link",
+        "✔ Accessible on mobile and desktop"
+    ],
+    mockLink: " http://127.0.0.1:8000/dbhubapp/dphub_gallery/{{i.id}} ",
+    actionText: "Open Image Gallery",
+    actionUrl: "http://127.0.0.1:8000/dbhubapp/dphub_gallery/{{i.id}}",
+    color: "#34a853"
+}
+
     };
 
     return map[optionId];
