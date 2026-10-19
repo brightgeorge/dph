@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Payment</title>
+    <title>Google Pay | UPI Payment</title>
 
     <style>
         * {
@@ -168,13 +168,13 @@
         <button
             type="button"
             class="pay-button"
-            onclick="openUPIApps()">
-            Pay using UPI App
+            onclick="openGooglePay()">
+            Pay using Google Pay
         </button>
 
         <p class="note">
-            Select a compatible UPI app if prompted.
-            Verify the receiver's name and UPI ID before confirming payment.
+            Please verify the receiver's name and UPI ID
+            in your payment app before confirming payment.
         </p>
 
     </div>
@@ -184,19 +184,19 @@
         const upiId = "revathylotus-1@okaxis";
         const payeeName = "REVATHY S";
 
-        // STANDARD UPI PAYMENT URL — NO additionalId
+        // CREATE STANDARD UPI PAYMENT URL WITHOUT additionalId
         const upiURL =
             "upi://pay?pa=" + encodeURIComponent(upiId) +
             "&pn=" + encodeURIComponent(payeeName);
 
-        // DISPLAY PAYMENT DETAILS
+        // DISPLAY PAYEE NAME AND UPI ID
         document.getElementById("payeeNameDisplay").textContent =
             payeeName;
 
         document.getElementById("upiIdDisplay").textContent =
             upiId;
 
-        // GENERATE QR CODE
+        // GENERATE QR CODE FROM THE UPI PAYMENT URL
         document.getElementById("qrImage").src =
             "https://api.qrserver.com/v1/create-qr-code/" +
             "?size=300x300&data=" +
@@ -236,11 +236,21 @@
             }
         }
 
-        // OPEN A COMPATIBLE UPI APP
-        function openUPIApps() {
-            // Launch the standard UPI payment URI.
-            // Android/browser decides which compatible apps are available.
-            window.location.href = upiURL;
+        // OPEN GOOGLE PAY ON SUPPORTED ANDROID DEVICES
+        function openGooglePay() {
+            const params = new URLSearchParams({
+                pa: upiId,
+                pn: payeeName
+            });
+
+            const intentURL =
+                "intent://pay?" + params.toString() +
+                "#Intent;" +
+                "scheme=upi;" +
+                "package=com.google.android.apps.nbu.paisa.user;" +
+                "end";
+
+            window.location.href = intentURL;
         }
     </script>
 
